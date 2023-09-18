@@ -11,6 +11,7 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text BestScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -48,7 +49,6 @@ public class MainManager : MonoBehaviour
                 float randomDirection = Random.Range(-1.0f, 1.0f);
                 Vector3 forceDir = new Vector3(randomDirection, 1, 0);
                 forceDir.Normalize();
-
                 Ball.transform.SetParent(null);
                 Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
             }
@@ -61,15 +61,29 @@ public class MainManager : MonoBehaviour
             }
         }
     }
+    private void LateUpdate()
+    {
+        MaxScore(m_Points, DataManager.Instance.MaxScore);
+    }
+    public void MaxScore(int currentScore, int bestScore)
+    {
+        BestScoreText.text = $"Best Score: {DataManager.Instance.MaxScoreName} {DataManager.Instance.MaxScore} ";
+        if (currentScore > bestScore)
+        {
+            DataManager.Instance.MaxScore = m_Points;
+            DataManager.Instance.MaxScoreName = DataManager.Instance.Name;
+        }
+    }
 
     void AddPoint(int point)
     {
         m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        ScoreText.text = $"Score : {DataManager.Instance.Name + " " + m_Points}";
     }
 
     public void GameOver()
     {
+        DataManager.Instance.SaveName();
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
