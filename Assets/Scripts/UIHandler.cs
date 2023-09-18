@@ -7,7 +7,7 @@ using TMPro;
 
 public class UIHandler : MonoBehaviour
 {
-    private TMP_InputField nameInput;
+    [SerializeField]private TMP_InputField nameInput;
     // Start is called before the first frame update
     void Start()
     {
